@@ -52,9 +52,14 @@ class MosaicRasters:
 			f.write(tiff + ' \n')
 		f.close()
 
-	def make_tiff_list(self):
+	def make_tiff_list(self, tiffs_present):
 		"""Make tiff list to use to make vrt"""
-		pass
+		if not os.path.exists('datain/{0}'.format(self.year)):
+			os.mkdir('datain/{0}'.format(self.year))
+		f = open('datain/{0}/tiff_list.txt'.format(self.year), 'w')
+		for tiff in tiffs_present:
+			f.write(tiff + '\n')
+		f.close()
 
 	def make_vrt(self):
 		"""List rasters and make VRT on local folder relative to location of rasters --> C:/OSGeo4W64/bin/gdalbuildvrt.exe"""

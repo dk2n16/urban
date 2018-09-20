@@ -25,8 +25,8 @@ class MosaicReclassifyTest(unittest.TestCase):
 	def test_rasters_are_all_accounted_for(self):
 		folder_list = self.mosaic_class_true.make_list_of_folders_in_parent()
 		tiffs_present, tiffs_missing = self.mosaic_class_true.check_all_rasters_present_for_year(folder_list)
-		self.assertTrue(len(tiffs_present) == 3)
-		self.assertTrue(len(tiffs_missing) == 1)
+		self.assertTrue(len(tiffs_present) == 4)
+		self.assertTrue(len(tiffs_missing) == 0)
 
 	def test_log_is_made_for_missing_countries(self):
 		folder_list = self.mosaic_class_true.make_list_of_folders_in_parent()
@@ -57,6 +57,15 @@ class MosaicReclassifyTest(unittest.TestCase):
 		content = [x.strip() for x in content]
 		self.assertEqual(content, tiffs_missing)
 		os.remove(log_loc)
+
+	def test_tiff_list_is_made(self):
+		folder_list = self.mosaic_class_true.make_list_of_folders_in_parent()
+		tiffs_present, tiffs_missing = self.mosaic_class_true.check_all_rasters_present_for_year(folder_list)
+		self.mosaic_class_true.check_for_missing_tiffs(tiffs_missing)
+		self.mosaic_class_true.make_tiff_list(tiffs_present)
+		self.assertTrue(os.path.exists('datain/{0}/tiff_list.txt'.format(self.mosaic_class_true.year)))
+
+
 
 
 
