@@ -47,10 +47,11 @@ class MosaicRasters:
 
 	def check_for_missing_tiffs(self, tiffs_missing):
 		"""Missing tiffs within each country"""
-		f = open('log/missing_tiffs/missing_tiffs_{0}.txt'.format(self.year), 'w')
-		for tiff in tiffs_missing:
-			f.write(tiff + ' \n')
-		f.close()
+		if len(tiffs_missing) > 0:
+			f = open('log/missing_tiffs/missing_tiffs_{0}.txt'.format(self.year), 'w')
+			for tiff in tiffs_missing:
+				f.write(tiff + ' \n')
+			f.close()
 
 	def make_tiff_list(self, tiffs_present):
 		"""Make tiff list to use to make vrt"""
@@ -63,11 +64,25 @@ class MosaicRasters:
 
 	def make_vrt(self):
 		"""List rasters and make VRT on local folder relative to location of rasters --> C:/OSGeo4W64/bin/gdalbuildvrt.exe"""
-		pass
+		mosaic_folder = 'datain/{0}'.format(self.year)
+		# GLOBAL EXTENT gdal_command = 'C:/OSGeo4W64/bin/gdalbuildvrt.exe -tr 0.00083333333 0.00083333333 -te -180.001249265 -72.0004161771 180.001249294 84.0020831987 -input_file_list {0} {1}'.format(os.path.join(mosaic_folder, 'tiff_list.txt'), os.path.join(mosaic_folder, 'urban_{0}_VRT.vrt'.format(self.year)))
+		gdal_command = 'C:/OSGeo4W64/bin/gdalbuildvrt.exe -tr 0.00083333333 0.00083333333 -input_file_list {0} {1}'.format(os.path.join(mosaic_folder, 'tiff_list.txt'), 'urban_{0}_VRT.vrt'.format(self.year))
+		subprocess.call(gdal_command, shell=True)
+
 
 	def mosaic_rasters(self):
 		"""Mosaic rasters in local folder ----> C:/OSGeo4W64/bin/gdal_translate.exe"""
-		pass
+		# if not os.path.exists('dataout/{0}'.format(self.year)):
+		# 	os.mkdir('dataout/{0}'.format(self.year))
+		if not os.path.exists('dataout/{0}'.format(self.year)):
+			os.mkdir('dataout/{0}'.format(self.year))
+		vrt_file = 'urban_{0}_VRT.vrt'.format(self.year)
+		#GLOBAL EXTENT #gdal_command = 'C:/OSGeo4W64/bin/gdal_translate.exe -ot Byte \
+		#-of GTIFF -tr 0.00083333333 0.00083333333 CHECK THIS-projwin -180.001249265 -72.0004161771 180.001249294 84.0020831987 CHECK THIS \
+		#-a_nodata 255 -co COMPRESS=LZW -co PREDICTOR=2 -co BIGTIFF=YES {0} dataout/{1}/urban_0_1_ND_{1}.tif'.format(vrt_file, self.year)
+		gdal_command = 'C:/OSGeo4W64/bin/gdal_translate.exe -ot Byte \
+		-of GTIFF -tr 0.00083333333 0.00083333333 -a_nodata 255 -co COMPRESS=LZW -co PREDICTOR=2 -co BIGTIFF=YES urban_{1}_VRT.vrt dataout/{1}/urban_0_1_ND_{1}.tif'.format(vrt_file, self.year)
+		subprocess.call(gdal_command, shell=True)
 
 
 
