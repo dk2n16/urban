@@ -20,7 +20,7 @@ class MosaicReclassifyTest(unittest.TestCase):
 	def test_all_folders_listed(self):
 		folder_list = self.mosaic_class_true.make_list_of_folders_in_parent()
 		self.assertTrue(len(folder_list) == 4)
-		self.assertEqual(folder_list, ['prj_2014-2020_AGO','prj_2014-2020_BWA','prj_2014-2020_NAM','prj_2014-2020_ZMB'])
+		self.assertEqual(folder_list.sort(), ['prj_2014-2020_AGO','prj_2014-2020_BWA','prj_2014-2020_NAM','prj_2014-2020_ZMB'].sort())
 
 	def test_rasters_are_all_accounted_for(self):
 		folder_list = self.mosaic_class_true.make_list_of_folders_in_parent()

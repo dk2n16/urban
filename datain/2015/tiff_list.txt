@@ -1,0 +1,4 @@
+tmp_data/prj_2014-2020_NAM/BSGM_Extentsprj_2014-2020_NAM_2015.tif
+tmp_data/prj_2014-2020_BWA/BSGM_Extentsprj_2014-2020_BWA_2015.tif
+tmp_data/prj_2014-2020_ZMB/BSGM_Extentsprj_2014-2020_ZMB_2015.tif
+tmp_data/prj_2014-2020_AGO/BSGM_Extentsprj_2014-2020_AGO_2015.tif
