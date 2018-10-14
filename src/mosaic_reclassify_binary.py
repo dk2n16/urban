@@ -47,10 +47,11 @@ class MosaicRasters:
 
 	def check_for_missing_tiffs(self, tiffs_missing):
 		"""Missing tiffs within each country"""
-		f = open('log/missing_tiffs/missing_tiffs_{0}.txt'.format(self.year), 'w')
-		for tiff in tiffs_missing:
-			f.write(tiff + ' \n')
-		f.close()
+		if len(tiffs_missing) > 0:
+			f = open('log/missing_tiffs/missing_tiffs_{0}.txt'.format(self.year), 'w')
+			for tiff in tiffs_missing:
+				f.write(tiff + ' \n')
+			f.close()
 
 	def make_tiff_list(self, tiffs_present):
 		"""Make tiff list to use to make vrt"""
@@ -59,15 +60,33 @@ class MosaicRasters:
 		f = open('datain/{0}/tiff_list.txt'.format(self.year), 'w')
 		for tiff in tiffs_present:
 			f.write(tiff + '\n')
+		#Write something to loop through tiffs missing and add the 2014 urban raster for those isos to the tiff list. ###################
 		f.close()
 
 	def make_vrt(self):
 		"""List rasters and make VRT on local folder relative to location of rasters --> C:/OSGeo4W64/bin/gdalbuildvrt.exe"""
-		pass
+		mosaic_folder = 'datain/{0}'.format(self.year)
+		# GLOBAL EXTENT gdal_command = 'C:/OSGeo4W64/bin/gdalbuildvrt.exe -tr 0.00083333333 0.00083333333 -te -180.001249265 -72.0004161771 180.001249294 84.0020831987 -input_file_list {0} {1}'.format(os.path.join(mosaic_folder, 'tiff_list.txt'), os.path.join(mosaic_folder, 'urban_{0}_VRT.vrt'.format(self.year)))
+		gdal_command = 'gdalbuildvrt -tr 0.00083333333 0.00083333333 -input_file_list {0} {1}'.format(os.path.join(mosaic_folder, 'tiff_list.txt'), 'urban_{0}_VRT.vrt'.format(self.year))
+		subprocess.call(gdal_command, shell=True)
+
 
 	def mosaic_rasters(self):
 		"""Mosaic rasters in local folder ----> C:/OSGeo4W64/bin/gdal_translate.exe"""
-		pass
+		# if not os.path.exists('dataout/{0}'.format(self.year)):
+		# 	os.mkdir('dataout/{0}'.format(self.year))
+		if not os.path.exists('dataout/{0}'.format(self.year)):
+			os.mkdir('dataout/{0}'.format(self.year))
+		vrt_file = 'urban_{0}_VRT.vrt'.format(self.year)
+		#GLOBAL EXTENT #gdal_command = 'C:/OSGeo4W64/bin/gdal_translate.exe -ot Byte \
+		#-of GTIFF -tr 0.00083333333 0.00083333333 CHECK THIS-projwin -180.001249265 -72.0004161771 180.001249294 84.0020831987 CHECK THIS \
+		#-a_nodata 255 -co COMPRESS=LZW -co PREDICTOR=2 -co BIGTIFF=YES {0} dataout/{1}/urban_0_1_ND_{1}.tif'.format(vrt_file, self.year)
+		gdal_command = 'gdal_translate -ot Byte \
+		-of GTIFF -a_nodata 255 -co COMPRESS=LZW -co PREDICTOR=2 -co BIGTIFF=YES urban_2015_VRT.vrt dataout/{0}/urban_1_0_ND_{0}.tif'.format(self.year)
+		#subprocess.call(['gdal_translate', 'urban_2015_VRT.vrt', 'dataout/{0}/urban_2015_1_0_ND.tif'], shell=True)
+		#subprocess.call(gdal_command, shell=True)
+		#gdal_command = "gdalwarp urban_2015_VRT.vrt dataout/2015/urban_2015_1_0_ND.tif"
+		subprocess.call(gdal_command, shell=True)
 
 
 
@@ -76,19 +95,35 @@ class MosaicRasters:
 class ReclassifyBinary:
 	"""Class to reclassify 1_0_ND global raster to 1_ND global raster"""
 
-	def __init__(self, path_to_raster):
+	def __init__(self, path_to_raster, year):
 
 		self.path_to_raster = path_to_raster
+		self.year = year
 
 	def reclassify_raster(self):
 		"""Reclassify raster at path_to_raster from 1_0_ND to 1_ND ----> C:/OSGeo4W64/bin/gdal_calc.py"""
-		pass
+		gdal_command = "gdal_calc.py -A {1} --outfile='dataout/{0}/urban_1_ND_{0}.tif' \
+		--calc='1*(A==1) + 255*(A==0)' --NoDataValue=255 --type=Byte --co=COMPRESS=LZW --co PREDICTOR=2 --co BIGTIFF=YES".format(self.year, self.path_to_raster)
+		subprocess.call(gdal_command, shell=True)
 
 if __name__ == "__main__":
 	#years = range(2015, 2021)
 	#for year in years:
 	#	mosaic_urban = MosaicRasters()
-	pass
+	mosaic = MosaicRasters('tmp_data', 'BSGM_Extentsprj_2014-2020_', 2015)
+	folders_list = mosaic.make_list_of_folders_in_parent()
+	tiffs_present, tiffs_missing = mosaic.check_all_rasters_present_for_year(folders_list)
+	mosaic.check_for_missing_isos(folders_list, tiffs_missing)
+	mosaic.check_for_missing_tiffs(tiffs_missing)
+	mosaic.make_tiff_list(tiffs_present)
+	mosaic.make_vrt()
+	mosaic.mosaic_rasters()
+	reclassify = ReclassifyBinary('dataout/2015/urban_1_0_ND_2015.tif', 2015)
+	reclassify.reclassify_raster()
+
+
+
+
 
 
 

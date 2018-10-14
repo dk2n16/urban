@@ -1,0 +1,40 @@
+<VRTDataset rasterXSize="26445" rasterYSize="29518">
+  <SRS>GEOGCS["WGS 84",DATUM["WGS_1984",SPHEROID["WGS 84",6378137,298.257223563,AUTHORITY["EPSG","7030"]],AUTHORITY["EPSG","6326"]],PRIMEM["Greenwich",0],UNIT["degree",0.0174532925199433],AUTHORITY["EPSG","4326"]]</SRS>
+  <GeoTransform>  1.1667916634999999e+01,  8.3333332999999999e-04,  0.0000000000000000e+00, -4.3729164479999998e+00,  0.0000000000000000e+00, -8.3333332999999999e-04</GeoTransform>
+  <VRTRasterBand dataType="Byte" band="1">
+    <NoDataValue>2.55000000000000E+02</NoDataValue>
+    <ColorInterp>Gray</ColorInterp>
+    <ComplexSource>
+      <SourceFilename relativeToVRT="1">tmp_data/prj_2014-2020_NAM/BSGM_Extentsprj_2014-2020_NAM_2015.tif</SourceFilename>
+      <SourceBand>1</SourceBand>
+      <SourceProperties RasterXSize="16226" RasterYSize="14414" DataType="Byte" BlockXSize="16226" BlockYSize="1" />
+      <SrcRect xOff="0" yOff="0" xSize="16226" ySize="14414" />
+      <DstRect xOff="80" yOff="15104" xSize="16226" ySize="14414" />
+      <NODATA>255</NODATA>
+    </ComplexSource>
+    <ComplexSource>
+      <SourceFilename relativeToVRT="1">tmp_data/prj_2014-2020_BWA/BSGM_Extentsprj_2014-2020_BWA_2015.tif</SourceFilename>
+      <SourceBand>1</SourceBand>
+      <SourceProperties RasterXSize="11233" RasterYSize="10951" DataType="Byte" BlockXSize="11233" BlockYSize="1" />
+      <SrcRect xOff="0" yOff="0" xSize="11233" ySize="10951" />
+      <DstRect xOff="9998" yOff="16090" xSize="11233" ySize="10951" />
+      <NODATA>255</NODATA>
+    </ComplexSource>
+    <ComplexSource>
+      <SourceFilename relativeToVRT="1">tmp_data/prj_2014-2020_ZMB/BSGM_Extentsprj_2014-2020_ZMB_2015.tif</SourceFilename>
+      <SourceBand>1</SourceBand>
+      <SourceProperties RasterXSize="14047" RasterYSize="11826" DataType="Byte" BlockXSize="14047" BlockYSize="1" />
+      <SrcRect xOff="0" yOff="0" xSize="14047" ySize="11826" />
+      <DstRect xOff="12398" yOff="4622" xSize="14047" ySize="11826" />
+      <NODATA>255</NODATA>
+    </ComplexSource>
+    <ComplexSource>
+      <SourceFilename relativeToVRT="1">tmp_data/prj_2014-2020_AGO/BSGM_Extentsprj_2014-2020_AGO_2015.tif</SourceFilename>
+      <SourceBand>1</SourceBand>
+      <SourceProperties RasterXSize="14897" RasterYSize="16403" DataType="Byte" BlockXSize="14897" BlockYSize="1" />
+      <SrcRect xOff="0" yOff="0" xSize="14897" ySize="16403" />
+      <DstRect xOff="0" yOff="0" xSize="14897" ySize="16403" />
+      <NODATA>255</NODATA>
+    </ComplexSource>
+  </VRTRasterBand>
+</VRTDataset>
